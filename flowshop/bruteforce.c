@@ -63,13 +63,13 @@ int main (int argc, char** argv) {
         }
     }
 
-    int p1[n + 1], p2[n + 1], p3[n + 1];
-    int o1[n], o2[n], o3[n];
+    int p[n + 1], o[n], o_min[n];
+
 
     for (int i = 0; i < n; ++i) {
-        p1[i] = p2[i] = p3[i] = o1[i] = o2[i] = o3[i] = i;
+        p[i] = o[i] = o_min[i] = i;
     }
-    p1[n] = p2[n] = p3[n] = n;
+    p[n] = n;
 
     int S[n][3];
     int S_min[n][3];
@@ -79,51 +79,37 @@ int main (int argc, char** argv) {
     clock_t time = clock();
 
     for (int j = 1; j < n;) {
-        S[o1[0]][0] = 0;
+        S[o[0]][0] = 0;
+        S[o[0]][1] = T[o[0]][0];
+        S[o[0]][2] = S[o[0]][1] + T[o[0]][1];
         for (int i = 1; i < n; ++i) {
-            S[o1[i]][0] = S[o1[i-1]][0] + T[o1[i-1]][0];
+            S[o[i]][0] = S[o[i-1]][0] + T[o[i-1]][0];
+            S[o[i]][1] = max(S[o[i]][0] + T[o[i]][0], S[o[i-1]][1] + T[o[i-1]][1]);
+            S[o[i]][2] = max(S[o[i]][1] + T[o[i]][1], S[o[i-1]][2] + T[o[i-1]][2]);
         }
-        int length1 = S[o1[n-1]][0] + T[o1[n-1]][0];
+        int length1 = S[o[n-1]][0] + T[o[n-1]][0];
+        int length2 = S[o[n-1]][1] + T[o[n-1]][2];
+        int length3 = S[o[n-1]][2] + T[o[n-1]][2];
 
-        for (int k = 1; k < n;) {
-            S[o2[0]][1] = S[o2[0]][0] + T[o2[0]][0];
-            for (int i = 1; i < n; ++i) {
-                S[o2[i]][1] = max(S[o2[i]][0] + T[o2[i]][0], 
-                                  S[o2[i-1]][1] + T[o2[i-1]][1]);
-            }
-            int length2 = S[o2[n-1]][1] + T[o2[n-1]][2];
-
-            for (int l = 1; l < n;) {
-                S[o3[0]][2] = S[o3[0]][1] + T[o3[0]][1];
-                for (int i = 1; i < n; ++i) {
-                    S[o3[i]][2] = max(S[o3[i]][1] + T[o3[i]][1], 
-                                      S[o3[i-1]][2] + T[o3[i-1]][2]);
-                }
-                int length3 = S[o3[n-1]][2] + T[o3[n-1]][2];
-
-                int length = max(length1, max(length2, length3));
-                if (length < min_length) {
-                    min_length = length;
-                    memcpy(S_min, S, n * 3 * sizeof(int));
-                }
-
-                l = quickperm(o3, p3, l, n);
-            }
-
-            k = quickperm(o2, p2, k, n);
+        int length = max(length1, max(length2, length3));
+        if (length < min_length) {
+            min_length = length;
+            memcpy(o_min, o, n * sizeof(int));
+            memcpy(S_min, S, n * 3 * sizeof(int));
         }
 
-        j = quickperm(o1, p1, j, n);
+        j = quickperm(o, p, j, n);
     }
 
     time = clock() - time;
     
     printf("length: %d\n\n", min_length);
 
+    printf("sequence:");
     for (int i = 0; i < n; ++i) {
-        printf("%d: %d %d %d\n", i, S_min[i][0], S_min[i][1], S_min[i][2]);
+        printf(" %d", o_min[i]);
     }
-    printf("\n");
+    printf("\n\n");
     
     char m[3][min_length];
     for (int i = 0; i < min_length; ++i) {

@@ -103,14 +103,6 @@ int main (int argc, char** argv) {
 
     time = clock() - time;
     
-    printf("length: %d\n\n", min_length);
-
-    printf("sequence:");
-    for (int i = 0; i < n; ++i) {
-        printf(" %d", o_min[i]);
-    }
-    printf("\n\n");
-    
     char m[3][min_length];
     for (int i = 0; i < min_length; ++i) {
         m[0][i] = m[1][i] = m[2][i] = -1;
@@ -138,6 +130,11 @@ int main (int argc, char** argv) {
         printf("\n");
     }
 
+    printf("\nlength: %d\n", min_length);
+    printf("sequence:");
+    for (int i = 0; i < n; ++i) {
+        printf(" %d", o_min[i] + 1);
+    }
     printf("\nruntime: %fs\n", ((float)time)/CLOCKS_PER_SEC);
 
     fclose(file);

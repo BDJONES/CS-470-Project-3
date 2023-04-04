@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 int main(int argc, char** argv) {
     if (argc != 3) {
@@ -11,6 +12,7 @@ int main(int argc, char** argv) {
 
     printf("%d\n", n);
 
+    srand(time(NULL));
     for (int i = 0; i < n; ++i) {
         printf("%d %d %d\n", rand() % (limit+1), rand() % (limit+1), rand() % (limit+1));
     }

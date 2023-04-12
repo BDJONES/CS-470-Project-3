@@ -5,7 +5,8 @@
 
 int main(int argc, char** argv) {
     if (argc != 3) {
-        printf("Usage: ./input {n} {limit}");
+        printf("Usage: ./input n limit file\n");
+        exit(EXIT_FAILURE);
     }
 
     int n = atoi(argv[1]);
@@ -19,9 +20,16 @@ int main(int argc, char** argv) {
     int max = limit - 1;
 
     if (remaining < m) {
-        fprintf(stderr, "No partition possible.");
+        fprintf(stderr, "Failed to find partition.");
         exit(EXIT_FAILURE);
     }
+
+    FILE* file = fopen(argv[3], "w");
+    if (file == NULL) {
+        fprintf(stderr, "Failed to open file '%s'\n", argv[3]);
+        exit(EXIT_FAILURE);
+    }
+
     for (int i = 0; i < m - 1; ++i) {
         if ((float)(remaining - min) / max > m - i - 1) {
             min = remaining - max * (m - i - 1);
@@ -35,8 +43,8 @@ int main(int argc, char** argv) {
     }
     partition[m - 1] = remaining;
 
-    printf("%d %d\n", n, limit);
+    fprintf(file, "%d %d\n", n, limit);
     for (int i = 0; i < m; ++i) {
-        printf("%d\n", partition[i]);
+        fprintf(file, "%d\n", partition[i]);
     }
 }

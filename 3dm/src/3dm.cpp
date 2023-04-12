@@ -16,7 +16,8 @@ int main (int argc, char** argv) {
     FILE* file;
 
     if (argc < 2 || argc > 3) {
-        printf("Usage: %s [FLAG] FILE\n", argv[0]);
+        printf("Usage: %s [options] file\n", argv[0]);
+        printf("Options:\n  -h  heuristic (default)\n  -b  brute force\n");
         exit(EXIT_FAILURE);
     }
 

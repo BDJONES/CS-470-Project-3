@@ -43,8 +43,9 @@ int main(int argc, char** argv) {
     }
     partition[m - 1] = remaining;
 
-    fprintf(file, "%d %d\n", n, limit);
+    fprintf(file, "%d\n", limit);
     for (int i = 0; i < m; ++i) {
         fprintf(file, "%d\n", partition[i]);
     }
+    fprintf(file, "$\n");
 }

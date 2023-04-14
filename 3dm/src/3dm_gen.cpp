@@ -16,10 +16,11 @@ int main(int argc, char** argv) {
     int n = atoi(argv[1]);
     int limit = atoi(argv[2]);
 
-    fprintf(file, "%d\n", n);
+    fprintf(file, "%d\n", limit);
 
     srand(time(NULL));
     for (int i = 0; i < n; ++i) {
-        fprintf(file, "%d %d %d\n", rand() % (limit+1), rand() % (limit+1), rand() % (limit+1));
+        fprintf(file, "%d %d %d\n", rand() % limit + 1, rand() % limit + 1, rand() % limit + 1);
     }
+    fprintf(file, "$\n");
 }

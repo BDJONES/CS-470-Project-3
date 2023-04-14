@@ -42,30 +42,35 @@ int main (int argc, char** argv) {
         exit(EXIT_FAILURE);
     }
 
-    int N;
-    fscanf(file, "%d\n", &N);
-    if (N <= 0) {
-        printf("Must provide number of triples\n");
+    int set_size = 0;
+    fscanf(file, "%d\n", &set_size);
+    if (set_size <= 0) {
+        printf("Must provide size of set\n");
         exit(EXIT_FAILURE);
     }
 
-    std::vector<Triple> T(N);
-    int M = 0;
+    std::vector<Triple> T;
+    int N = 0; 
 
-    for (int i = 0; i < N; ++i) {
-        if (feof(file)) {
-            printf("Expected %d triples but got %d\n", N, i);
-            exit(EXIT_FAILURE);
+    // read the file until we reach $ or EOF
+
+    while (!feof(file)) {
+        char c = fgetc(file);
+        if (c == '$') {
+            break;
         }
+        ungetc(c, file);
 
-        int count = fscanf(file, "%d %d %d\n", &T[i].x, &T[i].y, &T[i].z);
+        Triple t;
+        int count = fscanf(file, "%d %d %d\n", &t.x, &t.y, &t.z);
 
         if (count != 3) {
-            printf("Expected 3 integers but got %d\n", count);
+            printf("Expected 3 numbers but got %d\n", count);
             exit(EXIT_FAILURE);
         }
 
-        M = std::max(M, std::max(T[i].x, std::max(T[i].y, T[i].z)));
+        T.push_back(t);
+        ++N;
     }
     fclose(file);
 
@@ -73,9 +78,9 @@ int main (int argc, char** argv) {
 
     std::vector<Triple> set;
     if (mode == HEURISTIC) {
-        set = heuristic_3dm(T);
+        set = heuristic_3dm(set_size, T);
     } else if (mode == BRUTEFORCE) {
-        set = bruteforce_3dm(T);
+        set = bruteforce_3dm(set_size, T);
     }
     
     for (Triple t : set) {

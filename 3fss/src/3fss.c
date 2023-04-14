@@ -39,14 +39,16 @@ int main (int argc, char** argv) {
 
     if (!file) exit(EXIT_FAILURE);
 
-    int n;
-    fscanf(file, "%d\n", &n);
-    if (n <= 0) {
-        fprintf(stderr, "Must provide number of jobs\n");
-        exit(EXIT_FAILURE);
+    int n = 0;
+    fpos_t start; 
+    fgetpos(file, &start);
+    while (!feof(file) && fgetc(file) != '$') {
+        fscanf(file, "%*[^\n]\n");
+        ++n;
     }
 
     job jobs[n];
+    fsetpos(file, &start);
     for (int i = 0; i < n; ++i) {
         if (feof(file)) {
             fprintf(stderr, "Expected %d jobs but got %d\n", n, i);

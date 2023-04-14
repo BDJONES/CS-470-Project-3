@@ -18,12 +18,22 @@ int main(int argc, char** argv) {
         exit(EXIT_FAILURE);
     }
 
-    int n, limit;
-    fscanf(from, "%d %d\n", &n, &limit);
+    int limit;
+    fscanf(from, "%d\n", &limit);
+
+     int n = 0;
+    fpos_t start; 
+    fgetpos(from, &start);
+    while (!feof(from) && fgetc(from) != '$') {
+        fscanf(from, "%*[^\n]\n");
+        ++n;
+    }
 
     int a[3 * n];
+    fsetpos(from, &start);
     for (int i = 0; i < 3 *n; ++i) {
-        fscanf(from, "%d\n", a + i);
+        int c = fscanf(from, "%d\n", a + i);
+        if (c == 0) exit(EXIT_FAILURE);
         a[i] += limit;
     }
     limit *= 4;

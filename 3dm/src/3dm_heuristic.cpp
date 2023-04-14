@@ -5,16 +5,11 @@
 
 #include "3dm.h"
 
-std::vector<Triple> heuristic_3dm(std::vector<Triple>& T) {
-    int M = 0;
-    for (Triple t : T) {
-        M = std::max(M, std::max(t.x, std::max(t.y, t.z)));
-    }
-
-    int X[M + 1], Y[M + 1], Z[M + 1];
-    memset(X, 0, sizeof(int) * (M + 1));
-    memset(Y, 0, sizeof(int) * (M + 1));
-    memset(Z, 0, sizeof(int) * (M + 1));
+std::vector<Triple> heuristic_3dm(int set_size, std::vector<Triple>& T) {
+    int X[set_size + 1], Y[set_size + 1], Z[set_size + 1];
+    memset(X, 0, sizeof(int) * (set_size + 1));
+    memset(Y, 0, sizeof(int) * (set_size + 1));
+    memset(Z, 0, sizeof(int) * (set_size + 1));
 
     for (Triple t : T) {
         ++X[t.x];
@@ -30,9 +25,9 @@ std::vector<Triple> heuristic_3dm(std::vector<Triple>& T) {
         return a.score < b.score;
     });
 
-    memset(X, 0, sizeof(int) * (M + 1));
-    memset(Y, 0, sizeof(int) * (M + 1));
-    memset(Z, 0, sizeof(int) * (M + 1));
+    memset(X, 0, sizeof(int) * (set_size + 1));
+    memset(Y, 0, sizeof(int) * (set_size + 1));
+    memset(Z, 0, sizeof(int) * (set_size + 1));
 
     std::vector<Triple> set;
 

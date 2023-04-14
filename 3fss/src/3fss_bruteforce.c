@@ -60,5 +60,7 @@ int bruteforce_3fss(job jobs[], int n, int sequence[]) {
         j = quickperm(o, p, j, n);
     }
 
+    for (int i = 0; i < n; ++i) ++sequence[i];
+
     return min_length;
 }

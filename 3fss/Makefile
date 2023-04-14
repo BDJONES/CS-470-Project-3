@@ -7,7 +7,7 @@ all: 3fss 3fss_gen
 	gcc src/3fss_gen.c -o 3fss_gen
 
 clean:
-	rm -f 3fss 3fss_gen test
+	rm -f 3fss 3fss_gen
 
 test: all
-	./3fss_gen 8 8 test && echo "--Input--" && cat test && echo "\n--Heuristic--" && ./3fss -h test && echo "\n--Bruteforce--" && ./3fss -b test
+	./3fss_gen 8 8 test && echo "--Input--" && cat test && echo "\n--Heuristic--" && ./3fss -h test && echo "\n--Bruteforce--" && ./3fss -b test && rm test

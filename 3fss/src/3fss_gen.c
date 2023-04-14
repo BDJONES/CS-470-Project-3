@@ -13,10 +13,10 @@ int main(int argc, char** argv) {
 
     FILE* file = fopen(argv[3], "w");
 
-    fprintf(file, "%d\n", n);
-
     srand(time(NULL));
     for (int i = 0; i < n; ++i) {
         fprintf(file, "%d %d %d\n", rand() % limit + 1, rand() % limit + 1, rand() % limit + 1);
     }
+
+    fprintf(file, "$\n");
 }

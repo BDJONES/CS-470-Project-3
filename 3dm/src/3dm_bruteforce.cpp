@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <memory.h>
 #include <queue>
+#include <stdio.h>
 
 #include "3dm.h"
 
@@ -9,11 +10,11 @@ typedef struct Node {
     std::vector<Triple> remaining;
 } Node;
 
-int upperBound(int M, std::vector<Triple>& set, std::vector<Triple>& remaining) {
-    bool X[M + 1], Y[M + 1], Z[M + 1];
-    memset(X, false, sizeof(bool) * (M + 1));
-    memset(Y, false, sizeof(bool) * (M + 1));
-    memset(Z, false, sizeof(bool) * (M + 1));
+static int upperBound(int set_size, std::vector<Triple>& set, std::vector<Triple>& remaining) {
+    bool X[set_size + 1], Y[set_size + 1], Z[set_size + 1];
+    memset(X, false, sizeof(bool) * (set_size + 1));
+    memset(Y, false, sizeof(bool) * (set_size + 1));
+    memset(Z, false, sizeof(bool) * (set_size + 1));
 
     int count = set.size();
 
@@ -26,19 +27,14 @@ int upperBound(int M, std::vector<Triple>& set, std::vector<Triple>& remaining) 
         ++count;
     }
 
-    return count;
+    return std::min(count, set_size);
 }
 
-std::vector<Triple> bruteforce_3dm(std::vector<Triple>& T) {
-    int M = 0;
-    for (Triple t : T) {
-        M = std::max(M, std::max(t.x, std::max(t.y, t.z)));
-    }
-
+std::vector<Triple> bruteforce_3dm(int set_size, std::vector<Triple>& T) {
     std::queue<Node> candidates;
     candidates.push({{}, T});
 
-    Node best = {heuristic_3dm(T), {}};
+    Node best = {heuristic_3dm(set_size, T), {}};
     int lowerBound = best.set.size();
 
     while (!candidates.empty()) {
@@ -71,12 +67,12 @@ std::vector<Triple> bruteforce_3dm(std::vector<Triple>& T) {
                     best = child;
                 }
 
-                if (upperBound(M, child.set, child.remaining) >= lowerBound) {
+                if (upperBound(set_size, child.set, child.remaining) > lowerBound) {
                     candidates.push(child);
                 }
             }
 
-            if (upperBound(M, candidate.set, candidate.remaining) >= lowerBound) {
+            if (upperBound(set_size, candidate.set, candidate.remaining) > lowerBound) {
                 candidates.push(candidate);
             }
         }

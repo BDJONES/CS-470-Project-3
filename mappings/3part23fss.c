@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
     int limit;
     fscanf(from, "%d\n", &limit);
 
-     int n = 0;
+    int n = 0;
     fpos_t start; 
     fgetpos(from, &start);
     while (!feof(from) && fgetc(from) != '$') {

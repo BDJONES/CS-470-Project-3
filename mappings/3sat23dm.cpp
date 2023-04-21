@@ -115,4 +115,6 @@ int main(int argc, char** argv) {
             fprintf(to, "%d %d %d\n", t[0], t[1], t[2]);
         }
     }
+
+    fprintf(to, "$\n");
 }
